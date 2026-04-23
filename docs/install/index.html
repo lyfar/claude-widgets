@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Install claude-widgets · iPhone</title>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body class="installer">
+
+<header class="hero compact">
+  <span class="mark"><img src="/assets/mascot.svg" alt="Claude Code mascot"></span>
+  <h1>Install on iPhone</h1>
+  <p class="tagline">One tap sends the universal widget script straight into Scriptable.</p>
+</header>
+
+<aside class="prereq compact">
+  <strong>Before you tap install:</strong>
+  <ul>
+    <li><a href="https://scriptable.app">Scriptable</a> installed on this iPhone</li>
+    <li><a href="https://tailscale.com/download">Tailscale</a> running on both iPhone and Mac</li>
+    <li>Mac-side installer has been run (<code>curl … | bash</code>) and server is up</li>
+  </ul>
+</aside>
+
+<form id="config" class="card">
+  <label>
+    <span class="lbl">Mac Tailscale IP</span>
+    <input type="text" id="ip" name="ip" placeholder="100.68.216.93" autocomplete="off" inputmode="decimal" required>
+    <small>Shown by <code>claude-widgets qr</code> on your Mac.</small>
+  </label>
+
+  <label>
+    <span class="lbl">Port</span>
+    <input type="text" id="port" name="port" value="8787" required>
+  </label>
+
+  <button type="submit" id="install-btn" class="primary">Install in Scriptable</button>
+
+  <details>
+    <summary>Or copy the code manually</summary>
+    <textarea id="manual-source" readonly rows="8" spellcheck="false"></textarea>
+    <button type="button" id="copy-btn" class="secondary">Copy source</button>
+    <p class="subtle">Paste into a new Scriptable script named <code>Claude Code</code>, save, then add widget.</p>
+  </details>
+</form>
+
+<aside class="card note">
+  <h3>What you get from one install</h3>
+  <p>A single script named <code>Claude Code</code> powers every widget size. Add as many widgets to the home screen as you like — each can be Small, Medium, or Large, plus Lock-screen circular / rectangular / inline. The script detects which placement is calling it and renders accordingly.</p>
+  <p><strong>Light / dark</strong> follows your system setting automatically. To force a specific theme on a single widget, long-press it → <em>Edit Widget</em> → set <em>Parameter</em> to <code>light</code> or <code>dark</code>.</p>
+</aside>
+
+<p class="subtle centered"><a href="/">← back</a></p>
+
+<script type="module" src="/assets/install.js"></script>
+</body>
+</html>

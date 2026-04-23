@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>claude-widgets — iOS home-screen widgets for Claude Code</title>
+<meta name="description" content="Home-screen iPhone widgets that show your Claude Code usage. Zero extra tokens. Your Mac, your Tailnet, your data.">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+
+<header class="hero">
+  <span class="mark"><img src="/assets/mascot.svg" alt="Claude Code mascot"></span>
+  <h1>claude-widgets</h1>
+  <p class="tagline">iPhone home-screen widgets for <a href="https://claude.com/claude-code">Claude Code</a> usage. Zero extra tokens. Your Mac, your Tailnet, your data.</p>
+</header>
+
+<section class="gallery-wallpaper">
+  <div class="gallery">
+    <figure>
+      <div class="widget-preview size-small"><div class="widget-inner" data-size="small"></div></div>
+      <figcaption>Small · hottest rate-limit as hero</figcaption>
+    </figure>
+    <figure>
+      <div class="widget-preview size-medium"><div class="widget-inner" data-size="medium"></div></div>
+      <figcaption>Medium · both rate limits at a glance</figcaption>
+    </figure>
+    <figure>
+      <div class="widget-preview size-large"><div class="widget-inner" data-size="large"></div></div>
+      <figcaption>Large · live sessions + 7-day history</figcaption>
+    </figure>
+  </div>
+  <p class="gallery-note subtle centered">One script, every size. Pick any family in Scriptable — the widget detects and renders. Add as many as you want.</p>
+</section>
+
+<section class="install">
+  <h2>Install — three steps</h2>
+  <p class="subtle">All three are required. The first two are probably already on your devices.</p>
+
+  <ol class="steps">
+    <li>
+      <h3>1. Tailscale on both devices</h3>
+      <p>Free tier is fine. iPhone and Mac need to be on the same tailnet so the phone can reach the Mac — no public ports, no cloud hop.</p>
+      <p><a href="https://tailscale.com/download">Download Tailscale</a> · sign in on both devices with the same account.</p>
+    </li>
+    <li>
+      <h3>2. Scriptable on iPhone</h3>
+      <p>Free App Store app. This is what runs the widget code.</p>
+      <p><a href="https://scriptable.app">Scriptable on the App Store</a>.</p>
+    </li>
+    <li>
+      <h3>3. Run the installer on your Mac, scan the QR</h3>
+      <p>It wires the Claude Code statusline hook that collects your usage, starts a tiny HTTP server bound to your Tailscale IP, and prints a QR code in the terminal.</p>
+      <pre><code>curl -fsSL https://claude.egor.lol/install.sh | bash</code></pre>
+      <p>Scan the QR from the iPhone camera → tap <strong>Install in Scriptable</strong> → tap <strong>Save</strong>. You're done.</p>
+      <p class="subtle">Long-press home screen → <strong>+</strong> → <strong>Scriptable</strong> → pick Small / Medium / Large → select <em>Claude Code</em>. Same script powers every size; add more than one widget if you like.</p>
+    </li>
+  </ol>
+</section>
+
+<section class="prereq compact">
+  <strong>Also needed:</strong>
+  <ul>
+    <li>A Claude subscription plan — Free / Pro / Max. Pure API-key users won't see usage (Anthropic only returns <code>rate_limits</code> for subscribers).</li>
+    <li><a href="https://docs.claude.com/en/docs/claude-code/quickstart">Claude Code</a> installed on your Mac and signed in.</li>
+  </ul>
+</section>
+
+<section class="why">
+  <h2>Why</h2>
+  <ul>
+    <li><strong>Zero extra tokens.</strong> Reads data Claude Code already hands you via the statusline hook — no OAuth replay, no scraping.</li>
+    <li><strong>No cloud.</strong> JSON lives on your Mac and is served only on your Tailnet. Every line of shell, Python, and JavaScript is in this repo.</li>
+    <li><strong>No telemetry.</strong> This site has no analytics. The installer has no phone-home.</li>
+    <li><strong>Off-the-shelf parts.</strong> Bash, python3, launchd, Scriptable. If you lose the repo you can rebuild from memory.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>
+    <a href="https://github.com/lyfar/claude-widgets">GitHub</a> ·
+    <a href="/install/">Installer</a> ·
+    MIT license
+  </p>
+</footer>
+
+<script src="/assets/preview.js" type="module"></script>
+</body>
+</html>

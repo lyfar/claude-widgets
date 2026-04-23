@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.egor.usage-server</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/python3</string>
+        <string>-m</string>
+        <string>http.server</string>
+        <string>8787</string>
+        <string>--bind</string>
+        <string>100.68.216.93</string>
+        <string>--directory</string>
+        <string>/Users/egorlyfar/.cache</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/usage-server.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/usage-server.err</string>
+</dict>
+</plist>
