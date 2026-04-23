@@ -1,9 +1,8 @@
 // claude-widgets — iPhone installer page.
-// Tap-to-install uses a small bootstrap (the full widget is ~20 KB and
-// Safari truncates URL schemes past ~30 KB, landing empty in Scriptable).
-// Manual-copy keeps delivering the full pre-built widget for paste-in.
+// Scriptable has no URL-scheme "install" hook — only `run` and `open` for
+// scripts that already exist. So the flow is: bake the widget source with
+// the user's IP + mascot inlined, copy it, paste into Scriptable by hand.
 
-const SITE = location.origin;
 const TEMPLATE_URL = "/assets/widget-template.js.txt";
 const MASCOT_URL = "/assets/mascot.png";
 
@@ -12,10 +11,11 @@ const params = new URLSearchParams(location.search);
 
 const ipEl = $("#ip");
 const portEl = $("#port");
-const btn = $("#install-btn");
-const manual = $("#manual-source");
 const copyBtn = $("#copy-btn");
+const openBtn = $("#open-btn");
+const source = $("#source");
 const form = $("#config");
+const status = $("#status");
 
 ipEl.value = params.get("ip") || "";
 portEl.value = params.get("port") || "8787";
@@ -44,73 +44,58 @@ function blobToBase64(blob) {
   });
 }
 
-function readConfig() {
-  return { ip: ipEl.value.trim(), port: portEl.value.trim() || "8787" };
-}
-
-function buildFullWidget() {
-  const c = readConfig();
-  if (!c.ip || !template || !mascotB64) return "";
-  const url = `http://${c.ip}:${c.port}/claude-usage.json`;
+function buildSource() {
+  const ip = ipEl.value.trim();
+  const port = portEl.value.trim() || "8787";
+  if (!ip || !template || !mascotB64) return "";
   return template
-    .replace("__USAGE_URL__", url)
+    .replace("__USAGE_URL__", `http://${ip}:${port}/claude-usage.json`)
     .replace("__MASCOT_PNG_B64__", mascotB64);
 }
 
-function buildBootstrap() {
-  const c = readConfig();
-  if (!c.ip) return "";
-  return `// claude-widgets bootstrap
-// Fetches the full widget from ${SITE} and saves it as "Claude Code"
-// in your Scriptable iCloud folder. Runs once, then you can delete this.
-
-const SITE = ${JSON.stringify(SITE)};
-const IP = ${JSON.stringify(c.ip)};
-const PORT = ${JSON.stringify(c.port)};
-const NAME = "Claude Code";
-
-const tpl = await new Request(SITE + "/assets/widget-template.js.txt").loadString();
-const png = await new Request(SITE + "/assets/mascot.png").load();
-const b64 = png.toBase64String();
-const code = tpl
-  .replace("__USAGE_URL__", "http://" + IP + ":" + PORT + "/claude-usage.json")
-  .replace("__MASCOT_PNG_B64__", b64);
-
-const fm = FileManager.iCloud();
-fm.writeString(fm.joinPath(fm.documentsDirectory(), NAME + ".js"), code);
-
-const a = new Alert();
-a.title = NAME + " installed";
-a.message = "Long-press home screen → + → Scriptable → pick Small / Medium / Large → select " + NAME + ".";
-a.addAction("Done");
-await a.presentAlert();
-Script.complete();
-`;
-}
-
 function refresh() {
-  manual.value = buildFullWidget();
-  btn.disabled = !buildBootstrap();
+  const code = buildSource();
+  source.value = code;
+  const ready = !!code;
+  copyBtn.disabled = !ready;
+  openBtn.disabled = !ready;
+  status.textContent = ready
+    ? `Ready · ${Math.round(code.length / 1024)} KB`
+    : "Enter your Mac's Tailscale IP above.";
 }
 
 form.addEventListener("input", refresh);
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const src = buildBootstrap();
-  if (!src) return;
-  const url = `scriptable:///add?scriptName=${encodeURIComponent("Install Claude Code")}&scriptCode=${encodeURIComponent(src)}`;
-  location.href = url;
-});
+async function copySource() {
+  const code = source.value;
+  if (!code) return false;
+  try {
+    await navigator.clipboard.writeText(code);
+    return true;
+  } catch {
+    source.focus();
+    source.select();
+    try { return document.execCommand("copy"); } catch { return false; }
+  }
+}
 
 copyBtn.addEventListener("click", async () => {
-  try {
-    await navigator.clipboard.writeText(manual.value);
-    copyBtn.textContent = "Copied ✓";
-    setTimeout(() => (copyBtn.textContent = "Copy source"), 1600);
-  } catch {
-    manual.select();
-    document.execCommand("copy");
+  const ok = await copySource();
+  copyBtn.textContent = ok ? "Copied ✓" : "Copy failed — select text manually";
+  setTimeout(() => (copyBtn.textContent = "Copy widget code"), 1800);
+});
+
+openBtn.addEventListener("click", async () => {
+  const ok = await copySource();
+  if (ok) {
+    openBtn.textContent = "Copied · opening Scriptable…";
+    setTimeout(() => {
+      location.href = "scriptable://";
+    }, 250);
+    setTimeout(() => (openBtn.textContent = "Copy + open Scriptable"), 2200);
+  } else {
+    openBtn.textContent = "Copy failed — select text below";
+    setTimeout(() => (openBtn.textContent = "Copy + open Scriptable"), 2200);
   }
 });
 

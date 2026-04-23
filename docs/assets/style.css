@@ -240,16 +240,45 @@ button.secondary {
   color: var(--ink);
 }
 
-.installer .card.note {
-  margin-top: 18px;
+.installer .card.note,
+.installer .steps-card {
+  margin: 18px auto 0;
   max-width: 540px;
-  margin-left: auto;
-  margin-right: auto;
   padding: 18px 22px;
-  gap: 6px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
 }
-.installer .card.note h3 { margin: 0 0 4px; font-size: 1rem; }
-.installer .card.note p { margin: 0; font-size: 0.92rem; }
+.installer .card.note h3,
+.installer .steps-card h3 { margin: 0 0 10px; font-size: 1rem; }
+.installer .card.note p { margin: 0 0 6px; font-size: 0.92rem; }
+.installer .card.note p:last-child { margin-bottom: 0; }
+
+.btn-row { display: flex; flex-direction: column; gap: 8px; }
+.btn-row button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.paste-steps {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+.paste-steps li { line-height: 1.5; }
+
+.source-wrap {
+  max-width: 540px;
+  margin: 14px auto 0;
+  padding: 0 4px;
+}
+.source-wrap summary { padding: 4px 0; }
+.source-wrap textarea {
+  width: 100%;
+  font-size: 0.78rem;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  min-height: 180px;
+}
 
 details summary { cursor: pointer; color: var(--muted); font-size: 0.9rem; }
 textarea {

@@ -11,15 +11,15 @@
 <header class="hero compact">
   <span class="mark"><img src="/assets/mascot.svg" alt="Claude Code mascot"></span>
   <h1>Install on iPhone</h1>
-  <p class="tagline">One tap sends the universal widget script straight into Scriptable.</p>
+  <p class="tagline">Copy the widget source, paste it into Scriptable. ~30 seconds.</p>
 </header>
 
 <aside class="prereq compact">
-  <strong>Before you tap install:</strong>
+  <strong>Before you start:</strong>
   <ul>
     <li><a href="https://scriptable.app">Scriptable</a> installed on this iPhone</li>
     <li><a href="https://tailscale.com/download">Tailscale</a> running on both iPhone and Mac</li>
-    <li>Mac-side installer has been run (<code>curl … | bash</code>) and server is up</li>
+    <li>Mac-side installer has been run (<code>curl … | bash</code>) and its server is up</li>
   </ul>
 </aside>
 
@@ -35,20 +35,33 @@
     <input type="text" id="port" name="port" value="8787" required>
   </label>
 
-  <button type="submit" id="install-btn" class="primary">Install in Scriptable</button>
-  <p class="subtle">Opens Scriptable with a tiny <em>Install Claude Code</em> script. Tap <strong>Save</strong>, then <strong>Run</strong> (▶︎) once — it pulls the full widget from this site and saves it as <code>Claude Code</code>. Delete the installer after.</p>
-
-  <details>
-    <summary>Or paste the full widget manually</summary>
-    <textarea id="manual-source" readonly rows="8" spellcheck="false"></textarea>
-    <button type="button" id="copy-btn" class="secondary">Copy source</button>
-    <p class="subtle">New Scriptable script → paste → name it <code>Claude Code</code> → save. No internet needed after this.</p>
-  </details>
+  <div class="btn-row">
+    <button type="button" id="open-btn" class="primary" disabled>Copy + open Scriptable</button>
+    <button type="button" id="copy-btn" class="secondary" disabled>Copy widget code</button>
+  </div>
+  <p class="subtle" id="status">Enter your Mac's Tailscale IP above.</p>
 </form>
 
+<section class="card steps-card">
+  <h3>In Scriptable, do this once</h3>
+  <ol class="paste-steps">
+    <li>Tap <strong>+</strong> in the top-right corner to create a new script.</li>
+    <li><strong>Paste</strong> the code (it's already on your clipboard).</li>
+    <li>Tap the script's name at the top → rename to <code>Claude Code</code> → <strong>Done</strong>.</li>
+    <li>Tap <strong>▶︎ Play</strong> once to preview. You should see live rate-limit numbers.</li>
+    <li>Long-press the home screen → <strong>+</strong> → <strong>Scriptable</strong> → pick Small / Medium / Large → select <em>Claude Code</em>.</li>
+  </ol>
+</section>
+
+<details class="source-wrap">
+  <summary>View widget source (if clipboard copy didn't take)</summary>
+  <textarea id="source" readonly rows="12" spellcheck="false" autocomplete="off"></textarea>
+  <p class="subtle">Long-press the textarea → <em>Select All</em> → <em>Copy</em>.</p>
+</details>
+
 <aside class="card note">
-  <h3>What you get from one install</h3>
-  <p>A single script named <code>Claude Code</code> powers every widget size. Add as many widgets to the home screen as you like — each can be Small, Medium, or Large, plus Lock-screen circular / rectangular / inline. The script detects which placement is calling it and renders accordingly.</p>
+  <h3>One script, every size</h3>
+  <p>The <code>Claude Code</code> script powers every widget size. Add as many widgets to the home screen as you like — each can be Small, Medium, or Large, plus Lock-screen circular / rectangular / inline. The script detects which placement is calling it and renders accordingly.</p>
   <p><strong>Light / dark</strong> follows your system setting automatically. To force a specific theme on a single widget, long-press it → <em>Edit Widget</em> → set <em>Parameter</em> to <code>light</code> or <code>dark</code>.</p>
 </aside>
 
