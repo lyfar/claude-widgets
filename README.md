@@ -2,6 +2,7 @@
 
 Home-screen iOS widgets for [Claude Code](https://claude.com/claude-code) usage.
 Zero tokens consumed. No third-party servers. Your Mac, your Tailnet, your data.
+
 <img width="1197" height="597" alt="image" src="https://github.com/user-attachments/assets/be2d52d9-6330-4bc8-9178-02d3adca184f" />
 
 ## What it does
@@ -11,8 +12,17 @@ Claude Code rate limits — so you can pace work, hit caps deliberately, and sto
 getting surprised by the 5-hour session window.
 
 - **Small** — one hero metric at a glance
+
+<img width="498" height="1080" alt="compressed_IMG_0349" src="https://github.com/user-attachments/assets/7854b511-c805-497c-8894-b463fb8dd2ec" />
+
+
 - **Medium** — both rate-limit bars + current session
 - **Large** — everything: limits, session, today's cost, 7-day trend, top projects
+
+<img width="498" height="1080" alt="compressed_IMG_0348" src="https://github.com/user-attachments/assets/d9290271-6c42-4bc3-9179-d6b440aaccc1" />
+
+<img width="1290" height="996" alt="IMG_0350" src="https://github.com/user-attachments/assets/ba25ec42-49c9-4040-973d-260cef065e4d" />
+
 
 Powered by the Claude Code [statusline hook][statusline] — the same channel the
 CLI itself uses. No OAuth replay, no scraping, no ToS risk.
