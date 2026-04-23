@@ -2,8 +2,7 @@
 
 Home-screen iOS widgets for [Claude Code](https://claude.com/claude-code) usage.
 Zero tokens consumed. No third-party servers. Your Mac, your Tailnet, your data.
-
-![hero](./assets/screenshots/hero.png)
+<img width="1197" height="597" alt="image" src="https://github.com/user-attachments/assets/be2d52d9-6330-4bc8-9178-02d3adca184f" />
 
 ## What it does
 
