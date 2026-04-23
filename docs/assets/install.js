@@ -1,7 +1,9 @@
 // claude-widgets — iPhone installer page.
-// Reads ?ip=&port= from URL, lets user tweak, builds widget source with
-// mascot PNG baked in as base64, opens Scriptable via URL scheme.
+// Tap-to-install uses a small bootstrap (the full widget is ~20 KB and
+// Safari truncates URL schemes past ~30 KB, landing empty in Scriptable).
+// Manual-copy keeps delivering the full pre-built widget for paste-in.
 
+const SITE = location.origin;
 const TEMPLATE_URL = "/assets/widget-template.js.txt";
 const MASCOT_URL = "/assets/mascot.png";
 
@@ -46,7 +48,7 @@ function readConfig() {
   return { ip: ipEl.value.trim(), port: portEl.value.trim() || "8787" };
 }
 
-function buildSource() {
+function buildFullWidget() {
   const c = readConfig();
   if (!c.ip || !template || !mascotB64) return "";
   const url = `http://${c.ip}:${c.port}/claude-usage.json`;
@@ -55,19 +57,49 @@ function buildSource() {
     .replace("__MASCOT_PNG_B64__", mascotB64);
 }
 
+function buildBootstrap() {
+  const c = readConfig();
+  if (!c.ip) return "";
+  return `// claude-widgets bootstrap
+// Fetches the full widget from ${SITE} and saves it as "Claude Code"
+// in your Scriptable iCloud folder. Runs once, then you can delete this.
+
+const SITE = ${JSON.stringify(SITE)};
+const IP = ${JSON.stringify(c.ip)};
+const PORT = ${JSON.stringify(c.port)};
+const NAME = "Claude Code";
+
+const tpl = await new Request(SITE + "/assets/widget-template.js.txt").loadString();
+const png = await new Request(SITE + "/assets/mascot.png").load();
+const b64 = png.toBase64String();
+const code = tpl
+  .replace("__USAGE_URL__", "http://" + IP + ":" + PORT + "/claude-usage.json")
+  .replace("__MASCOT_PNG_B64__", b64);
+
+const fm = FileManager.iCloud();
+fm.writeString(fm.joinPath(fm.documentsDirectory(), NAME + ".js"), code);
+
+const a = new Alert();
+a.title = NAME + " installed";
+a.message = "Long-press home screen → + → Scriptable → pick Small / Medium / Large → select " + NAME + ".";
+a.addAction("Done");
+await a.presentAlert();
+Script.complete();
+`;
+}
+
 function refresh() {
-  const src = buildSource();
-  manual.value = src;
-  btn.disabled = !src;
+  manual.value = buildFullWidget();
+  btn.disabled = !buildBootstrap();
 }
 
 form.addEventListener("input", refresh);
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-  const src = buildSource();
+  const src = buildBootstrap();
   if (!src) return;
-  const url = `scriptable:///add?scriptName=${encodeURIComponent("Claude Code")}&scriptCode=${encodeURIComponent(src)}`;
+  const url = `scriptable:///add?scriptName=${encodeURIComponent("Install Claude Code")}&scriptCode=${encodeURIComponent(src)}`;
   location.href = url;
 });
 
